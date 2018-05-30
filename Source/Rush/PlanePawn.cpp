@@ -21,6 +21,10 @@ void APlanePawn::BeginPlay()
 // Called every frame
 void APlanePawn::Tick(float DeltaTime)
 {
+	// Update the current speed
+	Speed = (GetActorLocation() - PrevPosition) * DeltaTime;
+	PrevPosition = GetActorLocation();
+
 	Super::Tick(DeltaTime);
 
 }
