@@ -45,8 +45,6 @@ public:
 
 protected:
 
-	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
-
 	/** Bound to the left stick vertical axis */
 	void AddThrust(float Val);
 
@@ -78,7 +76,7 @@ private:
 		float MaxYaw;
 
 	/** The current speed of the plane */
-	UPROPERTY(Category = Physics, ReadAnywhere)
+	UPROPERTY(Category = Physics, VisibleAnywhere)
 		FVector Speed;
 
 	float Acceleration;

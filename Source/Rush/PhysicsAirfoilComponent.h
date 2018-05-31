@@ -4,17 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "PlaneComponent.generated.h"
+#include "PhysicsAirfoilComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class RUSH_API UPlaneComponent : public UActorComponent
+class RUSH_API UPhysicsAirfoilComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UPlaneComponent();
+	UPhysicsAirfoilComponent();
 
 protected:
 	// Called when the game starts
