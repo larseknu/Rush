@@ -1,13 +1,32 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "UObject/ConstructorHelpers.h"
+#include "Components/StaticMeshComponent.h"
+#include "PhysicsAirfoilComponent.h"
 #include "PlanePawn.h"
 
 
 // Sets default values
 APlanePawn::APlanePawn()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+ 	PrimaryActorTick.bCanEverTick = true;
+
+	// Structure to hold one-time initialization
+	struct FConstructorStatics
+	{
+		ConstructorHelpers::FObjectFinderOptional<UStaticMesh> PlaneMesh;
+		FConstructorStatics() : PlaneMesh(TEXT("/Game/Planes/PlaceholderPlane")) {}
+	};
+	static FConstructorStatics ConstructorStatics;
+
+	// Create static mesh component
+	PlaneMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlaneMesh0"));
+	PlaneMesh->SetStaticMesh(ConstructorStatics.PlaneMesh.Get());
+	RootComponent = PlaneMesh;
+
+	// Create right wing airfoil component
+	RightAirfoil = CreateDefaultSubobject<UPhysicsAirfoilComponent>(TEXT("RightAirfoil"));
+	
 
 }
 

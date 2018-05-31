@@ -15,17 +15,21 @@ class RUSH_API APlanePawn : public APawn
 	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* PlaneMesh;
 
-	UPROPERTY(Category = Physics, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class UPhysicsThrusterComponent* LeftWing;
-
-	UPROPERTY(Category = Physics, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class UPhysicsThrusterComponent* RightWing;
-
+	
 	UPROPERTY(Category = Physics, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class UPhysicsThrusterComponent* Propeller;
 
 	UPROPERTY(Category = Physics, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class UPhysicsThrusterComponent* Rudder;
+		class UPhysicsAirfoilComponent* LeftAirfoil;
+
+	UPROPERTY(Category = Physics, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UPhysicsAirfoilComponent* RightAirfoil;
+
+	UPROPERTY(Category = Physics, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UPhysicsAirfoilComponent* RearAirfoil;
+
+	UPROPERTY(Category = Physics, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UPhysicsAirfoilComponent* RudderAirfoil;
 	
 
 public:

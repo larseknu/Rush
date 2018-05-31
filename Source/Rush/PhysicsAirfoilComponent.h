@@ -3,12 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
+#include "Components/SceneComponent.h"
+#include "Components/PrimitiveComponent.h"
 #include "PhysicsAirfoilComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class RUSH_API UPhysicsAirfoilComponent : public UActorComponent
+class RUSH_API UPhysicsAirfoilComponent : public USceneComponent
 {
 	GENERATED_BODY()
 
@@ -20,10 +21,16 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+public:
+	
+	virtual void OnRegister() override;
 
-		
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
+protected:
+
+	/** The current lift force of the airfoil */
+	UPROPERTY(Category = Physics, BlueprintReadOnly)
+		float LiftForce;
 	
 };

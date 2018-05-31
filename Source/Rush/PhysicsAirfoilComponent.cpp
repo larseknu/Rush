@@ -6,11 +6,8 @@
 // Sets default values for this component's properties
 UPhysicsAirfoilComponent::UPhysicsAirfoilComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
+	PrimaryComponentTick.TickGroup = TG_PrePhysics;
 }
 
 
@@ -23,12 +20,22 @@ void UPhysicsAirfoilComponent::BeginPlay()
 	
 }
 
+void UPhysicsAirfoilComponent::OnRegister()
+{
+	Super::OnRegister();
+}
 
-// Called every frame
-void UPhysicsAirfoilComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UPhysicsAirfoilComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
-}
+	// Applied force to the base, so if we don't have one, do nothing.
+	if (!bIsActive || GetAttachParent())
+		return;
+	
+	FVector WorldForce = LiftForce * GetComponentTransform().TransformVectorNoScale(FVector(0.f, -1.f, 0.f));
 
+	UPrimitiveComponent* BasePrimComp = Cast<UPrimitiveComponent>(GetAttachParent());
+	if (BasePrimComp)
+		BasePrimComp->AddForceAtLocation(WorldForce, GetComponentLocation(), NAME_None);
+}
