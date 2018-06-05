@@ -4,6 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "UObject/ConstructorHelpers.h"
+#include "Components/StaticMeshComponent.h"
+#include "Engine.h"
+#include "Engine/World.h"
+#include "PhysicsAirfoilComponent.h"
 #include "PlanePawn.generated.h"
 
 UCLASS()
@@ -62,6 +67,10 @@ protected:
 	void AddYaw(float Val);
 
 private:
+
+	/* The amount of lift provided rear wings comared to the fron wings [0, 1) */
+	UPROPERTY(Category = Plane, EditAnywhere)
+		float LiftRatio = 0.2f;
 
 	/** The maximum acceleration of the plane */
 	UPROPERTY(Category = Plane, EditAnywhere)

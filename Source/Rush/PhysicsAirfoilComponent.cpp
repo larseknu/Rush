@@ -29,13 +29,25 @@ void UPhysicsAirfoilComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// Applied force to the base, so if we don't have one, do nothing.
 	if (!bIsActive || GetAttachParent())
 		return;
 	
-	FVector WorldForce = LiftForce * GetComponentTransform().TransformVectorNoScale(FVector(0.f, -1.f, 0.f));
+	FVector WorldForce = LiftForce * GetComponentTransform().TransformVectorNoScale(FVector(0.f, 0.f, 1.f));
 
 	UPrimitiveComponent* BasePrimComp = Cast<UPrimitiveComponent>(GetAttachParent());
 	if (BasePrimComp)
 		BasePrimComp->AddForceAtLocation(WorldForce, GetComponentLocation(), NAME_None);
+
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 25.f, FColor(255, 198, 128), FString::Printf(TEXT("WorldForce %s"), *WorldForce.ToString()));
+}
+
+void UPhysicsAirfoilComponent::SetLiftForce(float LiftForce) 
+{
+	this->LiftForce = LiftForce;
+}
+
+float UPhysicsAirfoilComponent::GetLiftForce()
+{
+	return LiftForce;
 }

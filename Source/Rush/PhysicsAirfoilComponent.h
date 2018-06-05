@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine.h"
 #include "Components/SceneComponent.h"
 #include "Components/PrimitiveComponent.h"
 #include "PhysicsAirfoilComponent.generated.h"
@@ -32,5 +33,11 @@ protected:
 	/** The current lift force of the airfoil */
 	UPROPERTY(Category = Physics, BlueprintReadOnly)
 		float LiftForce;
+
+public:
+
+	void SetLiftForce(float LiftForce);
+	float GetLiftForce();
+	
 	
 };
