@@ -14,10 +14,6 @@ class RUSH_API UPhysicsAirfoilComponent : public USceneComponent
 {
 	GENERATED_BODY()
 
-public:	
-	// Sets default values for this component's properties
-	UPhysicsAirfoilComponent();
-
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -35,6 +31,8 @@ protected:
 		float LiftForce;
 
 public:
+
+	UPhysicsAirfoilComponent();
 
 	void SetLiftForce(float LiftForce);
 	float GetLiftForce();

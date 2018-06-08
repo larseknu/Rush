@@ -8,6 +8,7 @@ UPhysicsAirfoilComponent::UPhysicsAirfoilComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	PrimaryComponentTick.TickGroup = TG_PrePhysics;
+	
 }
 
 
@@ -23,13 +24,14 @@ void UPhysicsAirfoilComponent::BeginPlay()
 void UPhysicsAirfoilComponent::OnRegister()
 {
 	Super::OnRegister();
+	SetActive(true);
 }
 
 void UPhysicsAirfoilComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (!bIsActive || GetAttachParent())
+	if (!bIsActive || !GetAttachParent())
 		return;
 	
 	FVector WorldForce = LiftForce * GetComponentTransform().TransformVectorNoScale(FVector(0.f, 0.f, 1.f));
@@ -38,8 +40,6 @@ void UPhysicsAirfoilComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	if (BasePrimComp)
 		BasePrimComp->AddForceAtLocation(WorldForce, GetComponentLocation(), NAME_None);
 
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 25.f, FColor(255, 198, 128), FString::Printf(TEXT("WorldForce %s"), *WorldForce.ToString()));
 }
 
 void UPhysicsAirfoilComponent::SetLiftForce(float LiftForce) 

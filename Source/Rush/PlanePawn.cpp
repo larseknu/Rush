@@ -8,6 +8,7 @@
 APlanePawn::APlanePawn()
 {
  	PrimaryActorTick.bCanEverTick = true;
+	
 
 	// Structure to hold one-time initialization
 	struct FConstructorStatics
@@ -20,28 +21,33 @@ APlanePawn::APlanePawn()
 	// Create static mesh component
 	PlaneMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlaneMesh0"));
 	PlaneMesh->SetStaticMesh(ConstructorStatics.PlaneMesh.Get());
+	PlaneMesh->SetSimulatePhysics(true);
 	RootComponent = PlaneMesh;
 
 	// Create right airfoil component
 	RightAirfoil = CreateDefaultSubobject<UPhysicsAirfoilComponent>(TEXT("RightAirfoil"));
 	RightAirfoil->SetupAttachment(RootComponent);
 	RightAirfoil->SetRelativeLocation(FVector(0.f, 200.f, 0.f));
+	RightAirfoil->RegisterComponent();
 	
 	// Create left airfoil component
 	LeftAirfoil = CreateDefaultSubobject<UPhysicsAirfoilComponent>(TEXT("LeftAirfoil"));
 	LeftAirfoil->SetupAttachment(RootComponent);
 	LeftAirfoil->SetRelativeLocation(FVector(0.f, -200.f, 0.f));
+	LeftAirfoil->RegisterComponent();
 
 	// Create rear airfoil component
 	RearAirfoil = CreateDefaultSubobject<UPhysicsAirfoilComponent>(TEXT("RearAirfoil"));
 	RearAirfoil->SetupAttachment(RootComponent);
 	RearAirfoil->SetRelativeLocation(FVector(-250.f, 0.f, 0.f));
+	RearAirfoil->RegisterComponent();
 	
 	// Create rudder airfoil component
 	RudderAirfoil = CreateDefaultSubobject<UPhysicsAirfoilComponent>(TEXT("RudderAirfoil"));
 	RudderAirfoil->SetupAttachment(RootComponent);
 	RudderAirfoil->SetRelativeLocation(FVector(-250.f, 0.f, 0.f));
 	RudderAirfoil->SetRelativeRotation(FRotator(0.f, 0.f, 90.f));
+	RudderAirfoil->RegisterComponent();
 
 }
 
@@ -87,7 +93,7 @@ void APlanePawn::BeginPlay()
 // Called every frame
 void APlanePawn::Tick(float DeltaTime)
 {
-	// Update the current speed
+	// Update the current speed (not needed?)
 	Speed = (GetActorLocation() - PrevPosition) * DeltaTime;
 	PrevPosition = GetActorLocation();
 
