@@ -26,16 +26,40 @@ public:
 
 protected:
 
-	/** The current lift force of the airfoil */
+	/** The calibrated lift force of the airfoil */
 	UPROPERTY(Category = Physics, BlueprintReadOnly)
-		float LiftForce;
+		float CalibratedLiftForce;
+
+	/** The plane coefficient. This is calculated when the component is registered. */
+	UPROPERTY(Category = Physics, BlueprintReadOnly)
+		float PlaneFactor;
+
+	/** The angle of attack. This value is clamped to [-1,1] */
+	UPROPERTY(Category = Physics, BlueprintReadOnly)
+		float AngleOfAttack = 0.f;
+
+	/** The lift factor of the airfoil i.e. how many calibrated lift forces to aloow at most (>1.0) */
+	UPROPERTY(Category = Physics, EditAnywhere)
+		float LiftFactor = 1.7f;
+
+	/** The lift bias i.e. the amount of lift when angle of attack is 0 (<1.0) */
+	UPROPERTY(Category = Physics, EditAnywhere)
+		float LiftBias = 0.5f;
 
 public:
 
 	UPhysicsAirfoilComponent();
 
-	void SetLiftForce(float LiftForce);
-	float GetLiftForce();
+	void UpdatePhysicsProperties();
+
+	void SetCalibratedLiftForce(float LiftForce);
+	float GetCalibratedLiftForce();
+
+	void SetAngleOfAttack(float);
+	float GetAngleOfAttack();
+
+	float GetLiftFactor();
+	float GetLiftBias();
 	
 	
 };

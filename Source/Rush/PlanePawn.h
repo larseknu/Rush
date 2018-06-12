@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "UObject/ConstructorHelpers.h"
-#include "Components/StaticMeshComponent.h"
 #include "Engine.h"
 #include "Engine/World.h"
 #include "PhysicsAirfoilComponent.h"
+#include "PhysicsDragComponent.h"
+#include "PlaneMeshComponent.h"
 #include "PlanePawn.generated.h"
 
 UCLASS()
@@ -18,11 +19,27 @@ class RUSH_API APlanePawn : public APawn
 	
 	/** StaticMesh component that will be the visuals for our flying pawn */
 	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* PlaneMesh;
+		class UPlaneMeshComponent* PlaneMesh;
 
+	/** Spring arm that will offset the camera */
+	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		USpringArmComponent* SpringArm;
+
+	/** Camera that will be attached to the spring arm for a third person perspective */
+	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		UCameraComponent* Camera;
+
+	/** SCene component for placing the first person camera */
+	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class USceneComponent* InternalCameraBase;
+
+	/** Camera component for the first person perspective */
+	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		UCameraComponent* InternalCamera;
 	
+	/** Physics thruster for the propeller */
 	UPROPERTY(Category = Physics, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class UPhysicsThrusterComponent* Propeller;
+		class UPhysicsThrusterComponent* Propulsion;
 
 	UPROPERTY(Category = Physics, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class UPhysicsAirfoilComponent* LeftAirfoil;
@@ -35,6 +52,9 @@ class RUSH_API APlanePawn : public APawn
 
 	UPROPERTY(Category = Physics, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class UPhysicsAirfoilComponent* RudderAirfoil;
+
+	UPROPERTY(Category = Physics, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UPhysicsDragComponent* Drag;
 	
 
 public:
@@ -54,49 +74,55 @@ public:
 
 protected:
 
-	/** Bound to the left stick vertical axis */
+	/** Bound to the left stick vertical axis for a relative control schema */
 	void AddThrust(float Val);
 
-	/** Bound to the right stick vertical axis */
+	/** Bound to the right stick vertical axis for a relative control schema */
 	void AddPitch(float Val);
 
-	/** Bound to the right stick horizontal axis */
+	/** Bound to the right stick horizontal axis for a relative control schema */
 	void AddRoll(float Val);
 
-	/** Bound to the triggers */
+	/** Bound to the left stick horizontal axis  for a relative control schema */
 	void AddYaw(float Val);
 
-private:
+	/** Bound to the left stick vertical axis for an absolute control schema */
+	void SetThrust(float Val);
 
-	/* The amount of lift provided rear wings comared to the fron wings [0, 1) */
-	UPROPERTY(Category = Plane, EditAnywhere)
-		float LiftRatio = 0.2f;
+	/** Bound to the right stick vertical axis for an absolute control schema */
+	void SetPitch(float Val);
 
-	/** The maximum acceleration of the plane */
-	UPROPERTY(Category = Plane, EditAnywhere)
-		float MaxAcceleration;
+	/** Bound to the right stick horizontal axis for an absolute control schema */
+	void SetRoll(float Val);
 
-	/** The maximum pitch */
-	UPROPERTY(Category = Plane, EditAnywhere)
-		float MaxPitch;
+	/** Bound to the left stick horizontal axis  for an absolute control schema */
+	void SetYaw(float Val);
 
-	/** The maximum roll */
-	UPROPERTY(Category = Plane, EditAnywhere)
-		float MaxRoll;
+	/** The maximum speed of the plane. This controls the wind resistance of the plane */
+	UPROPERTY(Category = Physics, EditAnywhere)
+		float MaxSpeed = 2000.0f;
 
-	/** The maximum yaw speed */
-	UPROPERTY(Category = Plane, EditAnywhere)
-		float MaxYaw;
+	/** The speed at which the plane is stable ([0,1]) */
+	UPROPERTY(Category = Physics, EditAnywhere)
+		float StableSpeed = 0.7;
 
-	/** The current speed of the plane */
-	UPROPERTY(Category = Physics, VisibleAnywhere)
-		FVector Speed;
+	/** The maximum thrust power of the plane */
+	UPROPERTY(Category = Physics, EditAnywhere)
+		float MaxThrust = 2000.0f;
+	
+	
 
 	float Acceleration;
 	float Pitch;
 	float Roll;
 	float Yaw;
 
-	FVector PrevPosition;
+public:
+
+	float GetStableSpeed();
+
+	float GetMaxThrust();
+
+	float GetMaxSpeed();
 	
 };
